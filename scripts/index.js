@@ -6,7 +6,6 @@ const nameInput = formElement.querySelector(".popup__input-name");
 const jobInput = formElement.querySelector(".popup__input-job");
 const nameElement = document.querySelector(".profile__name");
 const jobElement = document.querySelector(".profile__profession");
-const saveButtonElement = formElement.querySelector(".popup__save-button");
 
 const openPopup = function () {
   popupElement.classList.add("popup_is-opened");
@@ -38,6 +37,6 @@ function handleFormSubmit(evt) {
 popupEditButtonElement.addEventListener("click", openPopup);
 popupCloseButtonElement.addEventListener("click", closePopup);
 popupElement.addEventListener("click", closePopupByClickOnOverlay);
-saveButtonElement.addEventListener("click", handleFormSubmit);
+formElement.addEventListener("submit", handleFormSubmit);
 
 
