@@ -39,3 +39,6 @@ popupCloseButtonElement.addEventListener("click", closePopup);
 popupElement.addEventListener("click", closePopupByClickOnOverlay);
 formElement.addEventListener('submit', handleFormSubmit);
 
+console.log(document);
+console.dir(document);
+

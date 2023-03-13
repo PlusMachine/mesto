@@ -8,3 +8,10 @@
   margin-right: auto;
   margin-top: calc(50vh - 170px);
 }
+
+@media screen and (max-width: 580px) {
+  .popup__container {
+    max-width: 282px;
+    min-height: 322px;
+  }
+}
