@@ -4,4 +4,9 @@
   background-color: #000;
   border: none;
   cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.profile__edit-button:hover {
+  opacity: 80%;
 }
