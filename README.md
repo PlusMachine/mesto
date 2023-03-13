@@ -1,17 +1,21 @@
 # Проект: Место
 
-### Обзор
 
-* Figma
-* Картинки
 
-**Figma**
+## Проектная работа
 
-* [Ссылка на макет в Figma](https://www.figma.com/file/2cn9N9jSkmxD84oJik7xL7/JavaScript.-Sprint-4?node-id=0%3A1)
+- css
+- html
+- JS
 
-**Картинки**
+![Logo](https://repository-images.githubusercontent.com/402028024/4f451f65-30ab-49b9-a62a-71a5527b66db)
 
-Доставать картинки предстоит из Фигмы. Это расхожая практика, поэтому полезно потренироваться.
-Не забудьте [оптимизировать картинки](https://tinypng.com/), чтобы ваш сайт загружался быстрее.
 
-Удачи!
+## Authors
+
+- [Мовчан Артем](rapid11ru@yandex.ru)
+- [Яндекс Практикум]
+
+## Github Pages
+
+https://plusmachine.github.io/mesto/
