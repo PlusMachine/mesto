@@ -1,5 +1,7 @@
 .profile__edit-button {
-  padding-left: 18px;
+  margin-left: 18px;
+  padding: 0;
   background-color: #000;
   border: none;
+  cursor: pointer;
 }
