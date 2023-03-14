@@ -1,4 +1,4 @@
-.popup__input-job {
+.popup__form-field {
   display: block;
   border: 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
@@ -8,11 +8,11 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 17px;
-  margin-top: 21px;
   padding-top: 10px;
   padding-bottom: 10px;
+  margin-top: 21px;
 }
 
-.popup__input-job:focus {
+.popup__form-field:focus {
   outline: 0;
 }
