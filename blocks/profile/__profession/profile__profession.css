@@ -6,12 +6,17 @@
   color: #fff;
   margin: 0;
   padding: 10px 0 0 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 390px;
 }
 
 @media screen and (max-width: 950px) {
   .profile__profession {
     font-size: 16px;
     line-height: 19px;
+    max-width: 350px;
   }
 }
 
@@ -19,11 +24,14 @@
   .profile__profession {
     font-size: 14px;
     line-height: 17px;
+    max-width: 270px;
   }
 }
 
 @media screen and (max-width: 660px) {
   .profile__profession {
     text-align: center;
+    max-width: 215px;
+    margin: 0 auto;
   }
 }

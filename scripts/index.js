@@ -38,3 +38,5 @@ popupCloseButtonElement.addEventListener("click", closePopup);
 formElement.addEventListener("submit", handleFormSubmit);
 
 
+console.log('хлеб да соль'.indexOf('сахар'));
+
