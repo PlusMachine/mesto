@@ -46,8 +46,9 @@
       <form class="popup__form popup__form-edit" name="change-profile">
         <h2 class="popup__title">Редактировать профиль</h2>
         <fieldset class="popup__input-container">
-          <input type="text" class="popup__form-field popup__form-field_input_name" name="name">
-          <input type="text" class="popup__form-field popup__form-field_input_job" name="job">
+          <input type="text" class="popup__form-field popup__form-field_input_name" name="name" required
+            placeholder="Имя">
+          <input type="text" class="popup__form-field popup__form-field_input_job" name="job" placeholder="Профессия">
         </fieldset>
         <button class="popup__button popup__save-button" type="submit">Сохранить</button>
       </form>
@@ -60,9 +61,9 @@
       <form class="popup__form popup__form-add" name="change-profile">
         <h2 class="popup__title">Новое место</h2>
         <fieldset class="popup__input-container">
-          <input type="text" class="popup__form-field popup__form-field_input_title" name="title"
+          <input type="text" class="popup__form-field popup__form-field_input_title" name="title" required
             placeholder="Название">
-          <input type="text" class="popup__form-field popup__form-field_input_link" name="link"
+          <input type="url" class="popup__form-field popup__form-field_input_link" name="link" required
             placeholder="Ссылка на картинку">
         </fieldset>
         <button class="popup__button popup__add-button" type="submit">Создать</button>
