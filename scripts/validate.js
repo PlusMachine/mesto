@@ -14,8 +14,7 @@ const setEventListeners = (formToValidate, config) => {
 
   if (hasInvalidInput(formInputs)) {
     disableButton(formButton, config);
-  }
-  else {
+  } else {
     enableButton(formButton, config);
   };
 
@@ -24,8 +23,7 @@ const setEventListeners = (formToValidate, config) => {
       checkInputValidity(input);
       if (hasInvalidInput(formInputs)) {
         disableButton(formButton, config);
-      }
-      else {
+      } else {
         enableButton(formButton, config);
       }
     })
@@ -36,8 +34,7 @@ const checkInputValidity = (input) => {
   const currentInputErrorContainer = document.querySelector(`.${input.id}-error`);
   if (input.validity.valid) {
     currentInputErrorContainer.textContent = ''
-  }
-  else {
+  } else {
     currentInputErrorContainer.textContent = input.validationMessage;
   }
 };
