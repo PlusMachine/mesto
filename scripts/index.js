@@ -63,8 +63,8 @@ const closePopupByClickOnOverlay = function (event) {
 };
 
 const closePopupByPressEsc = function (event) {
-  const currentPopup = document.querySelector(".popup_is-opened");
   if (event.key === 'Escape') {
+    const currentPopup = document.querySelector(".popup_is-opened");
     closePopup(currentPopup);
   }
 };
@@ -85,6 +85,8 @@ function createCard(element) {
 
   htmlElement.querySelector(".elements__title").textContent = element.name;
   htmlElement.querySelector(".elements__image").src = element.link;
+  htmlElement.querySelector(".elements__image").alt = element.name;
+
 
   likeELement.addEventListener('click', (evt) => {
     evt.target.classList.toggle("elements__like_active");
@@ -124,17 +126,26 @@ function handleFormAddCard(evt) {
 function openPicture(element) {
   popupPicture.querySelector(".popup__img").src = element.link;
   popupPicture.querySelector(".popup__photo-title").textContent = element.name;
+  popupPicture.querySelector(".popup__img").alt = element.name;
 
   openPopup(popupPicture);
 }
 
-inputNamePopupEditProfileElement.value = nameProfileElement.textContent;
-inputJobPopupEditProfileElement.value = jobElement.textContent;
 
 buttonOpenPopupEditElement.addEventListener("click", () => {
+  inputNamePopupEditProfileElement.value = nameProfileElement.textContent;
+  inputJobPopupEditProfileElement.value = jobElement.textContent;
   openPopup(popupProfileEdit);
 });
-buttonOpenPopupAddNewCard.addEventListener("click", () => openPopup(popupAddNewCard));
+
+buttonOpenPopupAddNewCard.addEventListener("click", () => {
+  openPopup(popupAddNewCard);
+
+  const formButton = popupAddNewCard.querySelector(config.submitButtonSelector);
+  disableButton(formButton, config);
+});
+
+
 popupProfileCloseButtonElement.addEventListener("click", () => closePopup(popupProfileEdit));
 popupAddNewCardCloseButtonElement.addEventListener("click", () => closePopup(popupAddNewCard));
 popupPictureCloseButtonElement.addEventListener("click", () => closePopup(popupPicture));
