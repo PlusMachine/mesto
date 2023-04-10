@@ -2,8 +2,6 @@
 
 
 
-## Проектная работа
-
 - css
 - html
 - JS
@@ -14,7 +12,6 @@
 ## Authors
 
 - [Мовчан Артем](rapid11ru@yandex.ru)
-- [Яндекс Практикум]
 
 ## Github Pages
 
