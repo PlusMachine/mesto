@@ -46,20 +46,28 @@ const initialCards = [{
 
 const openPopup = function (popup) {
   popup.classList.add("popup_is-opened");
+  document.addEventListener("keydown", closePopupByPressEsc);
 };
 
 
 const closePopup = function (popup) {
   popup.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", closePopupByPressEsc);
 }
 
-/*const closePopupByClickOnOverlay = function (event) {
+const closePopupByClickOnOverlay = function (event) {
   if (event.target !== event.currentTarget) {
     return;
   }
-  closePopup();
-};*/
+  closePopup(event.target);
+};
 
+const closePopupByPressEsc = function (event) {
+  const currentPopup = document.querySelector(".popup_is-opened");
+  if (event.key === 'Escape') {
+    closePopup(currentPopup);
+  }
+};
 
 function handleFormSubmitPopupEditProfile(evt) {
   evt.preventDefault();
@@ -67,6 +75,7 @@ function handleFormSubmitPopupEditProfile(evt) {
   jobElement.textContent = inputJobPopupEditProfileElement.value;
   closePopup(popupProfileEdit);
 };
+
 
 function createCard(element) {
   const htmlElement = elementTemplate.querySelector(".elements__element").cloneNode(true);
@@ -119,15 +128,17 @@ function openPicture(element) {
   openPopup(popupPicture);
 }
 
+inputNamePopupEditProfileElement.value = nameProfileElement.textContent;
+inputJobPopupEditProfileElement.value = jobElement.textContent;
+
 buttonOpenPopupEditElement.addEventListener("click", () => {
   openPopup(popupProfileEdit);
-  inputNamePopupEditProfileElement.value = nameProfileElement.textContent;
-  inputJobPopupEditProfileElement.value = jobElement.textContent;
 });
 buttonOpenPopupAddNewCard.addEventListener("click", () => openPopup(popupAddNewCard));
 popupProfileCloseButtonElement.addEventListener("click", () => closePopup(popupProfileEdit));
 popupAddNewCardCloseButtonElement.addEventListener("click", () => closePopup(popupAddNewCard));
 popupPictureCloseButtonElement.addEventListener("click", () => closePopup(popupPicture));
-/*popupElement.addEventListener("click", closePopupByClickOnOverlay);*/
+popupProfileEdit.addEventListener("click", closePopupByClickOnOverlay);
+popupAddNewCard.addEventListener("click", closePopupByClickOnOverlay);
 buttonSaveProfileElement.addEventListener("submit", handleFormSubmitPopupEditProfile);
 formAddNewCard.addEventListener("submit", handleFormAddCard);

@@ -43,12 +43,15 @@
     <div class="popup__container">
       <button class="popup__close-button" type="button"><img class="popup__close-img" src="./images/CloseIcon.svg"
           alt="Закрыть"></button>
-      <form class="popup__form popup__form-edit" name="change-profile">
+      <form class="popup__form popup__form-edit" name="change-profile" novalidate>
         <h2 class="popup__title">Редактировать профиль</h2>
         <fieldset class="popup__input-container">
-          <input type="text" class="popup__form-field popup__form-field_input_name" name="name" required
-            placeholder="Имя">
-          <input type="text" class="popup__form-field popup__form-field_input_job" name="job" placeholder="Профессия">
+          <input type="text" id="name-input" class="popup__form-field popup__form-field_input_name" name="name" required
+            minlength="2" maxlength="40" placeholder="Имя">
+          <span class="popup__form-input-error name-input-error"></span>
+          <input type="text" id="job-input" class="popup__form-field popup__form-field_input_job" name="job"
+            placeholder="Профессия" required minlength="2" maxlength="200">
+          <span class="popup__form-input-error job-input-error"></span>
         </fieldset>
         <button class="popup__button popup__save-button" type="submit">Сохранить</button>
       </form>
@@ -58,13 +61,15 @@
     <div class="popup__container">
       <button class="popup__close-button" type="button"><img class="popup__close-img" src="./images/CloseIcon.svg"
           alt="Закрыть"></button>
-      <form class="popup__form popup__form-add" name="change-profile">
+      <form class="popup__form popup__form-add" name="change-profile" novalidate>
         <h2 class="popup__title">Новое место</h2>
         <fieldset class="popup__input-container">
-          <input type="text" class="popup__form-field popup__form-field_input_title" name="title" required
-            placeholder="Название">
-          <input type="url" class="popup__form-field popup__form-field_input_link" name="link" required
+          <input type="text" id="title-input" class="popup__form-field popup__form-field_input_title" name="title"
+            required placeholder="Название" minlength="2" maxlength="30">
+          <span class="popup__form-input-error title-input-error"></span>
+          <input type="url" id="link-input" class="popup__form-field popup__form-field_input_link" name="link" required
             placeholder="Ссылка на картинку">
+          <span class="popup__form-input-error link-input-error"></span>
         </fieldset>
         <button class="popup__button popup__add-button" type="submit">Создать</button>
       </form>
@@ -93,6 +98,7 @@
     </li>
   </template>
   <script src="./scripts/index.js"></script>
+  <script src="./scripts/validate.js"></script>
 </body>
 
 </html>
