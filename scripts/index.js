@@ -140,5 +140,6 @@ popupAddNewCardCloseButtonElement.addEventListener("click", () => closePopup(pop
 popupPictureCloseButtonElement.addEventListener("click", () => closePopup(popupPicture));
 popupProfileEdit.addEventListener("click", closePopupByClickOnOverlay);
 popupAddNewCard.addEventListener("click", closePopupByClickOnOverlay);
+popupPicture.addEventListener("click", closePopupByClickOnOverlay);
 buttonSaveProfileElement.addEventListener("submit", handleFormSubmitPopupEditProfile);
 formAddNewCard.addEventListener("submit", handleFormAddCard);
