@@ -21,18 +21,15 @@ const toggleButtonState = function (inputs, button, config) {
   } else {
     enableButton(button, config);
   };
-}
+};
 
 const setEventListeners = (formToValidate, config) => {
   const formInputs = Array.from(formToValidate.querySelectorAll(config.inputSelector));
   const formButton = formToValidate.querySelector(config.submitButtonSelector);
-  const forms = Array.from(document.querySelectorAll(config.formSelector));
 
-  forms.forEach(form => {
-    form.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-    })
-  })
+  formToValidate.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+  });
 
   formInputs.forEach(input => {
     input.addEventListener('input', () => {
@@ -40,7 +37,6 @@ const setEventListeners = (formToValidate, config) => {
       toggleButtonState(formInputs, formButton, config);
     })
   })
-
 };
 
 const checkInputValidity = (input) => {
