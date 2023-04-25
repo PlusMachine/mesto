@@ -1,3 +1,17 @@
+import Card from './Card.js';
+import FormValidator from './FormValidator.js';
+
+
+const settings = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__form-field',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
+
+
 const popupProfileEdit = document.querySelector(".popup-edit");
 const popupAddNewCard = document.querySelector(".popup-add");
 const popupPicture = document.querySelector(".popup-picture");
@@ -6,10 +20,10 @@ const popupAddNewCardCloseButtonElement = popupAddNewCard.querySelector(".popup_
 const popupPictureCloseButtonElement = popupPicture.querySelector(".popup__close-button");
 const buttonOpenPopupEditElement = document.querySelector(".profile__edit-button");
 const buttonOpenPopupAddNewCard = document.querySelector(".profile__add-button");
-const buttonSaveProfileElement = popupProfileEdit.querySelector(".popup__form-edit");
+const formEditProfile = popupProfileEdit.querySelector(".popup__form-edit");
 const formAddNewCard = popupAddNewCard.querySelector(".popup__form-add");
-const inputNamePopupEditProfileElement = buttonSaveProfileElement.querySelector(".popup__form-field_input_name");
-const inputJobPopupEditProfileElement = buttonSaveProfileElement.querySelector(".popup__form-field_input_job");
+const inputNamePopupEditProfileElement = formEditProfile.querySelector(".popup__form-field_input_name");
+const inputJobPopupEditProfileElement = formEditProfile.querySelector(".popup__form-field_input_job");
 const inputTitlePopupAddNewCardElement = formAddNewCard.querySelector(".popup__form-field_input_title");
 const inputLinkPopupAddNewCardElement = formAddNewCard.querySelector(".popup__form-field_input_link");
 const nameProfileElement = document.querySelector(".profile__name");
@@ -77,33 +91,49 @@ function handleFormSubmitPopupEditProfile(evt) {
 };
 
 
-function createCard(element) {
-  const htmlElement = elementTemplate.querySelector(".elements__element").cloneNode(true);
-  const likeELement = htmlElement.querySelector(".elements__like");
-  const basketElement = htmlElement.querySelector(".elements__basket");
-  const imageElement = htmlElement.querySelector(".elements__image");
+export function openPicture(element) {
+  popupPicture.querySelector(".popup__img").src = element.link;
+  popupPicture.querySelector(".popup__photo-title").textContent = element.name;
+  popupPicture.querySelector(".popup__img").alt = element.name;
 
-  htmlElement.querySelector(".elements__title").textContent = element.name;
-  htmlElement.querySelector(".elements__image").src = element.link;
-  htmlElement.querySelector(".elements__image").alt = element.name;
-
-
-  likeELement.addEventListener('click', (evt) => {
-    evt.target.classList.toggle("elements__like_active");
-  });
-
-  basketElement.addEventListener('click', (evt) => {
-    evt.target.closest(".elements__element").remove();
-  });
-
-  imageElement.addEventListener('click', () => openPicture(element))
-
-  return htmlElement
+  openPopup(popupPicture);
 }
 
+
+buttonOpenPopupEditElement.addEventListener("click", () => {
+  inputNamePopupEditProfileElement.value = nameProfileElement.textContent;
+  inputJobPopupEditProfileElement.value = jobElement.textContent;
+  openPopup(popupProfileEdit);
+});
+
+buttonOpenPopupAddNewCard.addEventListener("click", () => {
+  openPopup(popupAddNewCard);
+
+  const formButton = popupAddNewCard.querySelector(settings.submitButtonSelector);
+  AddCardFormValidator.disableButton(formButton);
+});
+
+
+popupProfileCloseButtonElement.addEventListener("click", () => closePopup(popupProfileEdit));
+popupAddNewCardCloseButtonElement.addEventListener("click", () => closePopup(popupAddNewCard));
+popupPictureCloseButtonElement.addEventListener("click", () => closePopup(popupPicture));
+popupProfileEdit.addEventListener("click", closePopupByClickOnOverlay);
+popupAddNewCard.addEventListener("click", closePopupByClickOnOverlay);
+popupPicture.addEventListener("click", closePopupByClickOnOverlay);
+formEditProfile.addEventListener("submit", handleFormSubmitPopupEditProfile);
+formAddNewCard.addEventListener("submit", handleFormAddCard);
+
+
+const AddCardFormValidator = new FormValidator(settings, formAddNewCard);
+const EditProfileFormValidator = new FormValidator(settings, formEditProfile);
+AddCardFormValidator.enableValidation();
+EditProfileFormValidator.enableValidation();
+
+
 function renderCard(item, container) {
-  const card = createCard(item);
-  container.prepend(card);
+  const card = new Card(item, elementTemplate);
+  const cardElement = card.getCard();
+  container.prepend(cardElement);
 }
 
 function renderArrayCards(array, container) {
@@ -123,34 +153,3 @@ function handleFormAddCard(evt) {
   formAddNewCard.reset();
 }
 
-function openPicture(element) {
-  popupPicture.querySelector(".popup__img").src = element.link;
-  popupPicture.querySelector(".popup__photo-title").textContent = element.name;
-  popupPicture.querySelector(".popup__img").alt = element.name;
-
-  openPopup(popupPicture);
-}
-
-
-buttonOpenPopupEditElement.addEventListener("click", () => {
-  inputNamePopupEditProfileElement.value = nameProfileElement.textContent;
-  inputJobPopupEditProfileElement.value = jobElement.textContent;
-  openPopup(popupProfileEdit);
-});
-
-buttonOpenPopupAddNewCard.addEventListener("click", () => {
-  openPopup(popupAddNewCard);
-
-  const formButton = popupAddNewCard.querySelector(config.submitButtonSelector);
-  disableButton(formButton, config);
-});
-
-
-popupProfileCloseButtonElement.addEventListener("click", () => closePopup(popupProfileEdit));
-popupAddNewCardCloseButtonElement.addEventListener("click", () => closePopup(popupAddNewCard));
-popupPictureCloseButtonElement.addEventListener("click", () => closePopup(popupPicture));
-popupProfileEdit.addEventListener("click", closePopupByClickOnOverlay);
-popupAddNewCard.addEventListener("click", closePopupByClickOnOverlay);
-popupPicture.addEventListener("click", closePopupByClickOnOverlay);
-buttonSaveProfileElement.addEventListener("submit", handleFormSubmitPopupEditProfile);
-formAddNewCard.addEventListener("submit", handleFormAddCard);
