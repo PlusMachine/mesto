@@ -2,32 +2,31 @@ class FormValidator {
   constructor(settings, form) {
     this._settings = settings;
     this._form = form;
+    this._inputList = Array.from(this._form.querySelectorAll(this._settings.inputSelector));
+    this._submitButton = this._form.querySelector(this._settings.submitButtonSelector);
   }
 
   enableValidation() {
-    const formInputs = Array.from(this._form.querySelectorAll(this._settings.inputSelector));
-    const formButton = this._form.querySelector(this._settings.submitButtonSelector);
-
     this._form.addEventListener('submit', (evt) => {
       evt.preventDefault();
     });
 
-    formInputs.forEach(input => {
+    this._inputList.forEach(input => {
       input.addEventListener('input', () => {
         this._checkInputValidity(input);
-        this._toggleButtonState(formInputs, formButton);
+        this._toggleButtonState(this._inputList, this._submitButton);
       })
     })
   };
 
-  enableButton(button) {
-    button.classList.remove(this._settings.inactiveButtonClass);
-    button.removeAttribute('disabled');
+  enableButton() {
+    this._submitButton.classList.remove(this._settings.inactiveButtonClass);
+    this._submitButton.removeAttribute('disabled');
   };
 
-  disableButton(button) {
-    button.classList.add(this._settings.inactiveButtonClass);
-    button.setAttribute('disabled', true);
+  disableButton() {
+    this._submitButton.classList.add(this._settings.inactiveButtonClass);
+    this._submitButton.setAttribute('disabled', true);
   };
 
   _checkInputValidity(input) {
@@ -39,16 +38,16 @@ class FormValidator {
     }
   };
 
-  _toggleButtonState(inputs, button) {
+  _toggleButtonState(inputs) {
     if (this._hasInvalidInput(inputs)) {
-      this.disableButton(button);
+      this.disableButton();
     } else {
-      this.enableButton(button);
+      this.enableButton();
     };
   };
 
-  _hasInvalidInput(formInputs) {
-    return formInputs.some(input => !input.validity.valid);
+  _hasInvalidInput() {
+    return this._inputList.some(input => !input.validity.valid);
   };
 
 }

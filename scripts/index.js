@@ -1,5 +1,6 @@
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
+import initialCards from './initialCards.js';
 
 
 const settings = {
@@ -30,32 +31,6 @@ const nameProfileElement = document.querySelector(".profile__name");
 const jobElement = document.querySelector(".profile__profession");
 const elementTemplate = document.querySelector(".template-element").content;
 const listElement = document.querySelector(".elements__list");
-
-const initialCards = [{
-  name: 'Архыз',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-},
-{
-  name: 'Челябинская область',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-},
-{
-  name: 'Иваново',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-},
-{
-  name: 'Камчатка',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-},
-{
-  name: 'Холмогорский район',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-},
-{
-  name: 'Байкал',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-}
-];
 
 
 const openPopup = function (popup) {
@@ -91,7 +66,7 @@ function handleFormSubmitPopupEditProfile(evt) {
 };
 
 
-export function openPicture(element) {
+function openPicture(element) {
   popupPicture.querySelector(".popup__img").src = element.link;
   popupPicture.querySelector(".popup__photo-title").textContent = element.name;
   popupPicture.querySelector(".popup__img").alt = element.name;
@@ -108,30 +83,28 @@ buttonOpenPopupEditElement.addEventListener("click", () => {
 
 buttonOpenPopupAddNewCard.addEventListener("click", () => {
   openPopup(popupAddNewCard);
-
-  const formButton = popupAddNewCard.querySelector(settings.submitButtonSelector);
-  AddCardFormValidator.disableButton(formButton);
+  addCardFormValidator.disableButton();
 });
 
 
 popupProfileCloseButtonElement.addEventListener("click", () => closePopup(popupProfileEdit));
 popupAddNewCardCloseButtonElement.addEventListener("click", () => closePopup(popupAddNewCard));
 popupPictureCloseButtonElement.addEventListener("click", () => closePopup(popupPicture));
-popupProfileEdit.addEventListener("click", closePopupByClickOnOverlay);
-popupAddNewCard.addEventListener("click", closePopupByClickOnOverlay);
+popupProfileEdit.addEventListener("mousedown", closePopupByClickOnOverlay);
+popupAddNewCard.addEventListener("mousedown", closePopupByClickOnOverlay);
 popupPicture.addEventListener("click", closePopupByClickOnOverlay);
 formEditProfile.addEventListener("submit", handleFormSubmitPopupEditProfile);
 formAddNewCard.addEventListener("submit", handleFormAddCard);
 
 
-const AddCardFormValidator = new FormValidator(settings, formAddNewCard);
-const EditProfileFormValidator = new FormValidator(settings, formEditProfile);
-AddCardFormValidator.enableValidation();
-EditProfileFormValidator.enableValidation();
+const addCardFormValidator = new FormValidator(settings, formAddNewCard);
+const editProfileFormValidator = new FormValidator(settings, formEditProfile);
+addCardFormValidator.enableValidation();
+editProfileFormValidator.enableValidation();
 
 
 function renderCard(item, container) {
-  const card = new Card(item, elementTemplate);
+  const card = new Card(item, elementTemplate, openPicture);
   const cardElement = card.getCard();
   container.prepend(cardElement);
 }

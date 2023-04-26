@@ -1,27 +1,25 @@
-import { openPicture } from "./index.js";
-
 class Card {
-  constructor(data, templateSelector) {
+  constructor(data, template, openPicture) {
     this._data = data;
-    this._templateSelector = templateSelector;
+    this._template = template;
+    this._openPicture = openPicture;
+    this._element = this._template.querySelector(".elements__element").cloneNode(true);
   }
 
   getCard() {
-    const htmlElement = this._templateSelector.querySelector(".elements__element").cloneNode(true);
+    this._setCardContent(this._element);
+    this._setEventListeners(this._element);
 
-    this._setCardContent(htmlElement);
-    this._setEventListeners(htmlElement);
-
-    return htmlElement
+    return this._element
   }
 
-  _setEventListeners(htmlElement) {
-    const likeElement = htmlElement.querySelector(".elements__like");
-    const basketElement = htmlElement.querySelector(".elements__basket");
-    const imageElement = htmlElement.querySelector(".elements__image");
+  _setEventListeners() {
+    const likeElement = this._element.querySelector(".elements__like");
+    const basketElement = this._element.querySelector(".elements__basket");
+    const imageElement = this._element.querySelector(".elements__image");
 
     likeElement.addEventListener('click', () => this._handleLikeButtonClick(likeElement));
-    basketElement.addEventListener('click', () => this._handleRemoveButtonClick(basketElement));
+    basketElement.addEventListener('click', () => this._handleRemoveButtonClick());
     imageElement.addEventListener('click', () => this._handleImageClick());
   }
 
@@ -29,18 +27,19 @@ class Card {
     likeElement.classList.toggle('elements__like_active');
   }
 
-  _handleRemoveButtonClick(basketElement) {
-    basketElement.closest('.elements__element').remove();
+  _handleRemoveButtonClick() {
+    this._element.remove()
+    this._element = null;
   }
 
   _handleImageClick() {
-    openPicture(this._data);
+    this._openPicture(this._data);
   }
 
-  _setCardContent(htmlElement) {
-    htmlElement.querySelector(".elements__title").textContent = this._data.name;
-    htmlElement.querySelector(".elements__image").src = this._data.link;
-    htmlElement.querySelector(".elements__image").alt = this._data.name;
+  _setCardContent() {
+    this._element.querySelector(".elements__title").textContent = this._data.name;
+    this._element.querySelector(".elements__image").src = this._data.link;
+    this._element.querySelector(".elements__image").alt = this._data.name;
   }
 }
 
