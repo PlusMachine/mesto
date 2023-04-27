@@ -7,8 +7,8 @@ class Card {
   }
 
   getCard() {
-    this._setCardContent(this._element);
-    this._setEventListeners(this._element);
+    this._setCardContent();
+    this._setEventListeners();
 
     return this._element
   }
