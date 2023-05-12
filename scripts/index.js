@@ -1,7 +1,7 @@
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
 import initialCards from './initialCards.js';
-
+import Section from './Section.js';
 
 const settings = {
   formSelector: '.popup__form',
@@ -106,14 +106,11 @@ editProfileFormValidator.enableValidation();
 function renderCard(item, container) {
   const card = new Card(item, elementTemplate, openPicture);
   const cardElement = card.getCard();
-  container.prepend(cardElement);
+  section.addItem(cardElement);
 }
 
-function renderArrayCards(array, container) {
-  array.forEach((item) => renderCard(item, container));
-};
-
-renderArrayCards(initialCards, listElement);
+const section = new Section({ items: initialCards, renderer: renderCard }, ".elements__list");
+section.renderItems();
 
 function handleFormAddCard(evt) {
   evt.preventDefault();
