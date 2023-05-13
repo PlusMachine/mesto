@@ -1,8 +1,8 @@
 class Card {
-  constructor(data, template, openPicture) {
+  constructor(data, template, picturePopup) {
     this._data = data;
     this._template = template;
-    this._openPicture = openPicture;
+    this._picturePopup = picturePopup;
     this._element = this._template.querySelector(".elements__element").cloneNode(true);
   }
 
@@ -33,7 +33,7 @@ class Card {
   }
 
   _handleImageClick() {
-    this._openPicture(this._data);
+    this._picturePopup.open(this._data);
   }
 
   _setCardContent() {
