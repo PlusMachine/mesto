@@ -1,6 +1,6 @@
-import Card from "./Card.js";
+import Popup from "./Popup.js";
 
-class PopupWithImage extends Card {
+class PopupWithImage extends Popup {
   constructor(popupSelector) {
     super(popupSelector);
   }
@@ -11,6 +11,8 @@ class PopupWithImage extends Card {
     this._popup.querySelector(".popup__img").alt = data.name;
     super.open();
   }
+
 }
+
 
 export default PopupWithImage;
