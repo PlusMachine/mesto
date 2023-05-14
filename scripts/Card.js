@@ -1,9 +1,9 @@
 class Card {
-  constructor(data, template, handleImageClick) {
+  constructor(data, template, handleCardClick) {
     this._data = data;
     this._template = template;
     this._element = this._template.querySelector(".elements__element").cloneNode(true);
-    this._handleImageClick = handleImageClick;
+    this._handleCardClick = handleCardClick;
   }
 
   getCard() {
@@ -20,7 +20,7 @@ class Card {
 
     likeElement.addEventListener('click', () => this._handleLikeButtonClick(likeElement));
     basketElement.addEventListener('click', () => this._handleRemoveButtonClick());
-    imageElement.addEventListener('click', () => this._handleImageClick(this._name, this._link));
+    imageElement.addEventListener('click', () => this._handleCardClick(this._name, this._link));
   }
 
   _handleLikeButtonClick(likeElement) {
@@ -31,11 +31,6 @@ class Card {
     this._element.remove()
     this._element = null;
   }
-
-
-  // _handleImageClick() {
-  //   this._picturePopup.open(this._data);
-  // }
 
   _setCardContent() {
     this._element.querySelector(".elements__title").textContent = this._data.name;

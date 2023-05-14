@@ -1,4 +1,18 @@
-//imports
+import {
+  settings,
+  popupProfileEdit,
+  popupPicture,
+  popupAddNewCard,
+  formAddNewCard,
+  formEditProfile,
+  nameProfileElement,
+  jobElement,
+  elementTemplate,
+  buttonOpenPopupAddNewCard,
+  buttonOpenPopupEditElement,
+  inputNamePopupEditProfileElement,
+  inputJobPopupEditProfileElement,
+} from './constants.js';
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
 import initialCards from './initialCards.js';
@@ -6,33 +20,6 @@ import Section from './Section.js';
 import Popup from './Popup.js';
 import PopupWithImage from './PopupWithImage.js';
 import PopupWithForm from './PopupWithForm.js';
-
-//set settings
-const settings = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__form-field',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-};
-
-//set constants
-const popupProfileEdit = document.querySelector(".popup-edit");
-const popupAddNewCard = document.querySelector(".popup-add");
-const popupPicture = document.querySelector(".popup-picture");
-const buttonOpenPopupEditElement = document.querySelector(".profile__edit-button");
-const buttonOpenPopupAddNewCard = document.querySelector(".profile__add-button");
-const formEditProfile = popupProfileEdit.querySelector(".popup__form-edit");
-const formAddNewCard = popupAddNewCard.querySelector(".popup__form-add");
-const inputNamePopupEditProfileElement = formEditProfile.querySelector(".popup__form-field_input_name");
-const inputJobPopupEditProfileElement = formEditProfile.querySelector(".popup__form-field_input_job");
-const inputTitlePopupAddNewCardElement = formAddNewCard.querySelector(".popup__form-field_input_title");
-const inputLinkPopupAddNewCardElement = formAddNewCard.querySelector(".popup__form-field_input_link");
-const nameProfileElement = document.querySelector(".profile__name");
-const jobElement = document.querySelector(".profile__profession");
-const elementTemplate = document.querySelector(".template-element").content;
-const listElement = document.querySelector(".elements__list");
 
 const profilePopup = new Popup(popupProfileEdit);
 profilePopup.setEventListeners();
@@ -49,14 +36,14 @@ addCardFormValidator.enableValidation();
 const editProfileFormValidator = new FormValidator(settings, formEditProfile);
 editProfileFormValidator.enableValidation();
 
+const cardList = new Section({ items: initialCards, renderer: renderCard }, ".elements__list");
+cardList.renderItems();
 
-function handleFormSubmitPopupEditProfile(evt) {
-  evt.preventDefault();
-  nameProfileElement.textContent = inputNamePopupEditProfileElement.value;
-  jobElement.textContent = inputJobPopupEditProfileElement.value;
+const popupAdd = new PopupWithForm(popupAddNewCard, handleFormAddCard);
+popupAdd.setEventListeners();
 
-  profilePopup.close();
-};
+const popupEdit = new PopupWithForm(popupProfileEdit, handleFormSubmitPopupEditProfile);
+popupEdit.setEventListeners();
 
 buttonOpenPopupEditElement.addEventListener("click", () => {
   inputNamePopupEditProfileElement.value = nameProfileElement.textContent;
@@ -70,28 +57,28 @@ buttonOpenPopupAddNewCard.addEventListener("click", () => {
   addCardFormValidator.disableButton();
 });
 
-formEditProfile.addEventListener("submit", handleFormSubmitPopupEditProfile);
-formAddNewCard.addEventListener("submit", handleFormAddCard);
-
-function renderCard(item, container) {
+function renderCard(item) {
   const card = new Card(item, elementTemplate, (name, link) => {
     picturePopup.open(item)
   });
   const cardElement = card.getCard();
-  section.addItem(cardElement);
+  cardList.addItem(cardElement);
 }
 
-const section = new Section({ items: initialCards, renderer: renderCard }, ".elements__list");
-section.renderItems();
-
-function handleFormAddCard(evt) {
-  evt.preventDefault();
+function handleFormAddCard(inputValues) {
   const newCard = {
-    name: inputTitlePopupAddNewCardElement.value,
-    link: inputLinkPopupAddNewCardElement.value
+    name: inputValues.title,
+    link: inputValues.link
   };
-  renderCard(newCard, listElement);
-  addNewCardPopup.close();
-  formAddNewCard.reset();
+
+  renderCard(newCard);
+  popupAdd.close();
 }
+
+function handleFormSubmitPopupEditProfile(inputValues) {
+  nameProfileElement.textContent = inputValues.name;
+  jobElement.textContent = inputValues.job;
+
+  popupEdit.close();
+};
 

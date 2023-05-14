@@ -3,6 +3,7 @@ class Popup {
     this._popup = popupSelector;
     this._handleEscClose = this._handleEscClose.bind(this);
   }
+
   open() {
     this._popup.classList.add("popup_is-opened");
     document.addEventListener("keydown", this._handleEscClose);
