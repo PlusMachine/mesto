@@ -4,8 +4,8 @@
 
 - css
 - html
-- JS
-- OOP
+- JS OOP
+- webpack
 
 ## Функционал
 
