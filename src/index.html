@@ -5,30 +5,30 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
-  <link rel="stylesheet" href="./pages/index.css">
   <title>Mesto</title>
 </head>
 
 <body class="page">
   <header class="header">
-    <img src="./images/logo.svg" alt="логотип" class="header__logo">
+    <img src="<%=require('./images/logo.svg')%>" alt="логотип" class="header__logo">
   </header>
   <main>
     <section class="profile" aria-label="профиль">
       <div class="profile__user">
-        <img src="./images/avatar.jpg" alt="аватар" class="profile__avatar">
+        <img src="<%=require('./images/avatar.jpg')%>" alt="аватар" class="profile__avatar">
         <div class="profile__info">
           <div class="profile__personal-data">
             <h1 class="profile__name">Жак-Ив Кусто</h1>
             <button class="profile__edit-button" type="button">
-              <img src="./images/EditButton.svg" alt="редактировать профиль" class="profile__edit-button-pic">
+              <img src="<%=require('./images/EditButton.svg')%>" alt="редактировать профиль"
+                class="profile__edit-button-pic">
             </button>
           </div>
           <p class="profile__profession">Исследователь океана</p>
         </div>
       </div>
       <button class="profile__add-button" type="button">
-        <img src="./images/add-button.svg" alt="добавить" class="profile__add-button-pic">
+        <img src="<%=require('./images/add-button.svg')%>" alt="добавить" class="profile__add-button-pic">
       </button>
     </section>
     <section class="elements" aria-label="фотогалерея">
@@ -41,8 +41,8 @@
   </footer>
   <section class="popup popup-edit">
     <div class="popup__container">
-      <button class="popup__close-button" type="button"><img class="popup__close-img" src="./images/CloseIcon.svg"
-          alt="Закрыть"></button>
+      <button class="popup__close-button" type="button"><img class="popup__close-img"
+          src="<%=require('./images/CloseIcon.svg')%>" alt="Закрыть"></button>
       <form class="popup__form popup__form-edit" name="change-profile" novalidate>
         <h2 class="popup__title">Редактировать профиль</h2>
         <fieldset class="popup__input-container">
@@ -59,8 +59,8 @@
   </section>
   <section class="popup popup-add">
     <div class="popup__container">
-      <button class="popup__close-button" type="button"><img class="popup__close-img" src="./images/CloseIcon.svg"
-          alt="Закрыть"></button>
+      <button class="popup__close-button" type="button"><img class="popup__close-img"
+          src="<%=require('./images/CloseIcon.svg')%>" alt="Закрыть"></button>
       <form class="popup__form popup__form-add" name="add-card" novalidate>
         <h2 class="popup__title">Новое место</h2>
         <fieldset class="popup__input-container">
@@ -77,8 +77,8 @@
   </section>
   <section class="popup popup-picture">
     <div class="popup__container">
-      <button class="popup__close-button" type="button"><img class="popup__close-img" src="./images/CloseIcon.svg"
-          alt="Закрыть"></button>
+      <button class="popup__close-button" type="button"><img class="popup__close-img"
+          src="<%=require('./images/CloseIcon.svg')%>" alt="Закрыть"></button>
       <img src="/" alt="фото" class="popup__img">
       <h2 class="popup__photo-title"> </h2>
     </div>
@@ -86,18 +86,17 @@
   <template class="template-element">
     <li class="elements__element">
       <button class="elements__basket-button" type="button">
-        <img src="./images/basket.svg" alt="удалить" class="elements__basket">
+        <img src="<%=require('./images/basket.svg')%>" alt="удалить" class="elements__basket">
       </button>
       <img src="/" alt="фото" class="elements__image">
       <div class="elements__text-container">
         <h2 class="elements__title"></h2>
         <button class="elements__like-button" type="button">
-          <img src="./images/like.svg" alt="нравится" class="elements__like">
+          <img src="<%=require('./images/like.svg')%>" alt="нравится" class="elements__like">
         </button>
       </div>
     </li>
   </template>
-  <script type="module" src="./scripts/index.js"></script>
 </body>
 
 </html>
