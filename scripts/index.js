@@ -5,13 +5,13 @@ import {
   popupAddNewCard,
   formAddNewCard,
   formEditProfile,
-  nameProfileElement,
+  nameElement,
   jobElement,
   elementTemplate,
   buttonOpenPopupAddNewCard,
   buttonOpenPopupEditElement,
-  inputNamePopupEditProfileElement,
-  inputJobPopupEditProfileElement,
+  inputNameElement,
+  inputJobElement,
 } from './constants.js';
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
@@ -20,6 +20,7 @@ import Section from './Section.js';
 import Popup from './Popup.js';
 import PopupWithImage from './PopupWithImage.js';
 import PopupWithForm from './PopupWithForm.js';
+import UserInfo from './UserInfo.js';
 
 const profilePopup = new Popup(popupProfileEdit);
 profilePopup.setEventListeners();
@@ -42,12 +43,14 @@ cardList.renderItems();
 const popupAdd = new PopupWithForm(popupAddNewCard, handleFormAddCard);
 popupAdd.setEventListeners();
 
-const popupEdit = new PopupWithForm(popupProfileEdit, handleFormSubmitPopupEditProfile);
+const popupEdit = new PopupWithForm(popupProfileEdit, handleSubmitSetInfo);
 popupEdit.setEventListeners();
 
+const userInfo = new UserInfo({ nameSelector: nameElement, jobSelector: jobElement });
+
 buttonOpenPopupEditElement.addEventListener("click", () => {
-  inputNamePopupEditProfileElement.value = nameProfileElement.textContent;
-  inputJobPopupEditProfileElement.value = jobElement.textContent;
+  inputNameElement.value = userInfo.getUserInfo().name;
+  inputJobElement.value = userInfo.getUserInfo().job;
 
   profilePopup.open();
 });
@@ -75,9 +78,8 @@ function handleFormAddCard(inputValues) {
   popupAdd.close();
 }
 
-function handleFormSubmitPopupEditProfile(inputValues) {
-  nameProfileElement.textContent = inputValues.name;
-  jobElement.textContent = inputValues.job;
+function handleSubmitSetInfo(inputValues) {
+  userInfo.setUserInfo({ name: inputValues.name, job: inputValues.job });
 
   popupEdit.close();
 };
