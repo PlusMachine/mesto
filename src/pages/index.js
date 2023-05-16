@@ -35,10 +35,10 @@ editProfileFormValidator.enableValidation();
 const cardList = new Section({ items: initialCards, renderer: renderCard }, ".elements__list");
 cardList.renderItems();
 
-const popupAdd = new PopupWithForm(popupAddNewCard, handleFormAddCard);
+const popupAdd = new PopupWithForm(popupAddNewCard, handleFormAddCard, settings);
 popupAdd.setEventListeners();
 
-const popupEdit = new PopupWithForm(popupProfileEdit, handleSubmitSetInfo);
+const popupEdit = new PopupWithForm(popupProfileEdit, handleSubmitSetInfo, settings);
 popupEdit.setEventListeners();
 
 const userInfo = new UserInfo({ nameSelector: nameElement, jobSelector: jobElement });
@@ -47,29 +47,33 @@ buttonOpenPopupEditElement.addEventListener("click", () => {
   inputNameElement.value = userInfo.getUserInfo().name;
   inputJobElement.value = userInfo.getUserInfo().job;
 
+  editProfileFormValidator.resetValidation();
   popupEdit.open();
 });
 
 buttonOpenPopupAddNewCard.addEventListener("click", () => {
+  addCardFormValidator.resetValidation();
   popupAdd.open();
   addCardFormValidator.disableButton();
 });
 
-function renderCard(item) {
+function createCard(item) {
   const card = new Card(item, elementTemplate, (name, link) => {
     picturePopup.open(item)
   });
-  const cardElement = card.getCard();
+  return card.getCard();
+}
+
+function renderCard(item) {
+  const cardElement = createCard(item);
   cardList.addItem(cardElement);
 }
 
 function handleFormAddCard(inputValues) {
-  const newCard = {
+  renderCard({
     name: inputValues.title,
     link: inputValues.link
-  };
-
-  renderCard(newCard);
+  });
   popupAdd.close();
 }
 

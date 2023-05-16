@@ -29,6 +29,14 @@ class FormValidator {
     this._submitButton.setAttribute('disabled', true);
   };
 
+  resetValidation() {
+    this._toggleButtonState();
+
+    this._inputList.forEach((inputElement) => {
+      const currentInputErrorContainer = document.querySelector(`.${inputElement.id}-error`).textContent = "";
+    });
+  }
+
   _checkInputValidity(input) {
     const currentInputErrorContainer = document.querySelector(`.${input.id}-error`);
     if (input.validity.valid) {

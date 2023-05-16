@@ -1,14 +1,12 @@
 import Popup from "./Popup.js";
-import {
-  settings,
-} from '../utils/constants.js';
 
 class PopupWithForm extends Popup {
-  constructor(popupSelector, handleSubmit) {
+  constructor(popupSelector, handleSubmit, settings) {
     super(popupSelector);
     this._handleSubmit = handleSubmit;
-    this._form = this._popup.querySelector(settings.formSelector);
-    this._inputList = this._popup.querySelectorAll(settings.inputSelector);
+    this._settings = settings;
+    this._form = this._popup.querySelector(this._settings.formSelector);
+    this._inputList = this._popup.querySelectorAll(this._settings.inputSelector);
   }
   _getInputValues() {
     const inputValues = {};
@@ -32,15 +30,6 @@ class PopupWithForm extends Popup {
     super.close();
     this._form.reset();
   }
-
-  // resetValidation() {
-  //   this._toggleButtonState(); <== управляем кнопкой ==
-
-  //     this._inputList.forEach((inputElement) => {
-  //       this._hideError(inputElement) <==очищаем ошибки ==
-  //   });
-
-  // }
 }
 
 export default PopupWithForm;
