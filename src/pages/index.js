@@ -12,25 +12,19 @@ import {
   buttonOpenPopupEditElement,
   inputNameElement,
   inputJobElement,
-} from './constants.js';
-import Card from './Card.js';
-import FormValidator from './FormValidator.js';
-import initialCards from './initialCards.js';
-import Section from './Section.js';
-import Popup from './Popup.js';
-import PopupWithImage from './PopupWithImage.js';
-import PopupWithForm from './PopupWithForm.js';
-import UserInfo from './UserInfo.js';
+} from '../utils/constants.js';
+import Card from '../components/Card.js';
+import FormValidator from '../components/FormValidator.js';
+import initialCards from '../components/initialCards.js';
+import Section from '../components/Section.js';
+import Popup from '../components/Popup.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import UserInfo from '../components/UserInfo.js';
 import '../pages/index.css';
-
-const profilePopup = new Popup(popupProfileEdit);
-profilePopup.setEventListeners();
 
 const picturePopup = new PopupWithImage(popupPicture);
 picturePopup.setEventListeners();
-
-const addNewCardPopup = new Popup(popupAddNewCard);
-addNewCardPopup.setEventListeners();
 
 const addCardFormValidator = new FormValidator(settings, formAddNewCard);
 addCardFormValidator.enableValidation();
@@ -53,11 +47,11 @@ buttonOpenPopupEditElement.addEventListener("click", () => {
   inputNameElement.value = userInfo.getUserInfo().name;
   inputJobElement.value = userInfo.getUserInfo().job;
 
-  profilePopup.open();
+  popupEdit.open();
 });
 
 buttonOpenPopupAddNewCard.addEventListener("click", () => {
-  addNewCardPopup.open();
+  popupAdd.open();
   addCardFormValidator.disableButton();
 });
 
