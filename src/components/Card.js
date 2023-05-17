@@ -18,13 +18,13 @@ class Card {
   }
 
   _setEventListeners() {
-    this._likeButton.addEventListener('click', () => this._handleLikeButtonClick(likeElement));
+    this._likeButton.addEventListener('click', () => this._handleLikeButtonClick());
     this._basketButton.addEventListener('click', () => this._handleRemoveButtonClick());
     this._cardImage.addEventListener('click', () => this._handleCardClick(this._name, this._link));
   }
 
-  _handleLikeButtonClick(likeElement) {
-    likeElement.classList.toggle('elements__like_active');
+  _handleLikeButtonClick() {
+    this._likeButton.classList.toggle('elements__like_active');
   }
 
   _handleRemoveButtonClick() {
