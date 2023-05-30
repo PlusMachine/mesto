@@ -1,14 +1,8 @@
 .elements__like {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 38px;
   margin: 0 20px 0 0;
-  cursor: pointer;
-  transition: opacity 0.3s;
-}
-
-.elements__like:hover {
-  opacity: 50%;
-}
-
-.elements__like:active {
-  content: url(../../../images/like_dark.svg);
 }

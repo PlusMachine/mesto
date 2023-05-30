@@ -5,9 +5,9 @@ class Section {
     this._container = document.querySelector(containerSelector);
   }
 
-  renderItems() {
+  renderItems(cardList) {
     this._items.forEach((item) => {
-      this._renderer(item);
+      this._renderer(item, cardList);
     });
   }
 

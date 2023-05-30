@@ -4,7 +4,7 @@ class Card {
     this._template = template;
     this._element = this._template.querySelector(".elements__element").cloneNode(true);
     this._handleCardClick = handleCardClick;
-    this._likeButton = this._element.querySelector(".elements__like");
+    this._likeButton = this._element.querySelector(".elements__like-icon");
     this._basketButton = this._element.querySelector(".elements__basket");
     this._cardImage = this._element.querySelector(".elements__image");
     this._cardTitle = this._element.querySelector(".elements__title")
@@ -24,11 +24,11 @@ class Card {
   }
 
   _handleLikeButtonClick() {
-    this._likeButton.classList.toggle('elements__like_active');
+    this._likeButton.classList.toggle('elements__like-icon_active');
   }
 
   _handleRemoveButtonClick() {
-    this._element.remove()
+    this._element.remove();
     this._element = null;
   }
 

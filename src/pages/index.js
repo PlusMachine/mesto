@@ -6,22 +6,33 @@ import {
   formAddNewCard,
   formEditProfile,
   nameElement,
-  jobElement,
+  aboutElement,
+  avatarElement,
   elementTemplate,
   buttonOpenPopupAddNewCard,
   buttonOpenPopupEditElement,
   inputNameElement,
-  inputJobElement,
+  inputAboutElement,
 } from '../utils/constants.js';
+import Api from '../components/Api.js';
 import Card from '../components/Card.js';
 import FormValidator from '../components/FormValidator.js';
-import initialCards from '../components/initialCards.js';
 import Section from '../components/Section.js';
 import Popup from '../components/Popup.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 import '../pages/index.css';
+
+const api = new Api({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-66',
+  headers: {
+    authorization: '2a145710-3bc0-4bda-81bf-8857fba682fa',
+    'Content-Type': 'application/json'
+  }
+});
+
+let cardList;
 
 const picturePopup = new PopupWithImage(popupPicture);
 picturePopup.setEventListeners();
@@ -32,8 +43,12 @@ addCardFormValidator.enableValidation();
 const editProfileFormValidator = new FormValidator(settings, formEditProfile);
 editProfileFormValidator.enableValidation();
 
-const cardList = new Section({ items: initialCards, renderer: renderCard }, ".elements__list");
-cardList.renderItems();
+api.getInitialCards().then((res) => {
+  const items = res.reverse();
+
+  cardList = new Section({ items, renderer: renderCard }, ".elements__list");
+  cardList.renderItems(cardList);
+});
 
 const popupAdd = new PopupWithForm(popupAddNewCard, handleFormAddCard, settings);
 popupAdd.setEventListeners();
@@ -41,11 +56,11 @@ popupAdd.setEventListeners();
 const popupEdit = new PopupWithForm(popupProfileEdit, handleSubmitSetInfo, settings);
 popupEdit.setEventListeners();
 
-const userInfo = new UserInfo({ nameSelector: nameElement, jobSelector: jobElement });
+const userInfo = new UserInfo({ nameSelector: nameElement, aboutSelector: aboutElement, avatarSelector: avatarElement });
 
 buttonOpenPopupEditElement.addEventListener("click", () => {
   inputNameElement.value = userInfo.getUserInfo().name;
-  inputJobElement.value = userInfo.getUserInfo().job;
+  inputAboutElement.value = userInfo.getUserInfo().about;
 
   editProfileFormValidator.resetValidation();
   popupEdit.open();
@@ -64,22 +79,32 @@ function createCard(item) {
   return card.getCard();
 }
 
-function renderCard(item) {
+function renderCard(item, cardList) {
   const cardElement = createCard(item);
   cardList.addItem(cardElement);
 }
 
 function handleFormAddCard(inputValues) {
-  renderCard({
-    name: inputValues.title,
-    link: inputValues.link
-  });
+  api.addCard(inputValues.title, inputValues.link)
+    .then((res) => {
+      renderCard({ name: res.name, link: res.link }, cardList)
+    });
   popupAdd.close();
 }
 
 function handleSubmitSetInfo(inputValues) {
-  userInfo.setUserInfo({ name: inputValues.name, job: inputValues.job });
+  api.updateProfileInfo(inputValues.name, inputValues.about)
+    .then(res => res.json())
+    .then((res) => userInfo.setUserInfo({ name: res.name, about: res.about }))
 
   popupEdit.close();
 };
+
+api.getUser().then((res) => {
+  const name = res.name;
+  const about = res.about;
+  const avatar = res.avatar;
+  userInfo.setUserInfo({ name, about, avatar })
+}
+);
 
