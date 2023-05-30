@@ -5,6 +5,7 @@ class Card {
     this._element = this._template.querySelector(".elements__element").cloneNode(true);
     this._handleCardClick = handleCardClick;
     this._likeButton = this._element.querySelector(".elements__like-icon");
+    this._likeCounter = this._element.querySelector(".elements__like-counter");
     this._basketButton = this._element.querySelector(".elements__basket");
     this._cardImage = this._element.querySelector(".elements__image");
     this._cardTitle = this._element.querySelector(".elements__title")
@@ -20,7 +21,7 @@ class Card {
   _setEventListeners() {
     this._likeButton.addEventListener('click', () => this._handleLikeButtonClick());
     this._basketButton.addEventListener('click', () => this._handleRemoveButtonClick());
-    this._cardImage.addEventListener('click', () => this._handleCardClick(this._name, this._link));
+    this._cardImage.addEventListener('click', () => this._handleCardClick());
   }
 
   _handleLikeButtonClick() {
@@ -36,7 +37,10 @@ class Card {
     this._cardTitle.textContent = this._data.name;
     this._cardImage.src = this._data.link;
     this._cardImage.alt = this._data.name;
+    this._likeCounter.textContent = this._data.likes.length;
   }
+
+
 }
 
 export default Card;

@@ -24,6 +24,8 @@ import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 import '../pages/index.css';
 
+let cardList;
+
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-66',
   headers: {
@@ -31,8 +33,6 @@ const api = new Api({
     'Content-Type': 'application/json'
   }
 });
-
-let cardList;
 
 const picturePopup = new PopupWithImage(popupPicture);
 picturePopup.setEventListeners();
@@ -45,7 +45,6 @@ editProfileFormValidator.enableValidation();
 
 api.getInitialCards().then((res) => {
   const items = res.reverse();
-
   cardList = new Section({ items, renderer: renderCard }, ".elements__list");
   cardList.renderItems(cardList);
 });
@@ -87,7 +86,7 @@ function renderCard(item, cardList) {
 function handleFormAddCard(inputValues) {
   api.addCard(inputValues.title, inputValues.link)
     .then((res) => {
-      renderCard({ name: res.name, link: res.link }, cardList)
+      renderCard({ name: res.name, link: res.link, likes: res.likes }, cardList)
     });
   popupAdd.close();
 }
