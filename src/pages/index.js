@@ -3,6 +3,7 @@ import {
   popupProfileEdit,
   popupPicture,
   popupAddNewCard,
+  popupConfirm,
   formAddNewCard,
   formEditProfile,
   nameElement,
@@ -21,6 +22,7 @@ import Section from '../components/Section.js';
 import Popup from '../components/Popup.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
 import UserInfo from '../components/UserInfo.js';
 import '../pages/index.css';
 
@@ -34,6 +36,8 @@ const api = new Api({
   }
 });
 
+
+
 const picturePopup = new PopupWithImage(popupPicture);
 picturePopup.setEventListeners();
 
@@ -43,11 +47,12 @@ addCardFormValidator.enableValidation();
 const editProfileFormValidator = new FormValidator(settings, formEditProfile);
 editProfileFormValidator.enableValidation();
 
-api.getInitialCards().then((res) => {
-  const items = res.reverse();
-  cardList = new Section({ items, renderer: renderCard }, ".elements__list");
-  cardList.renderItems(cardList);
-});
+Promise.all([api.getInitialCards(), api.getUser()])
+  .then(([initialCards, user]) => {
+    const items = initialCards.reverse();
+    cardList = new Section({ items, renderer: renderCard }, ".elements__list", user._id);
+    cardList.renderItems(cardList);
+  });
 
 const popupAdd = new PopupWithForm(popupAddNewCard, handleFormAddCard, settings);
 popupAdd.setEventListeners();
@@ -55,7 +60,16 @@ popupAdd.setEventListeners();
 const popupEdit = new PopupWithForm(popupProfileEdit, handleSubmitSetInfo, settings);
 popupEdit.setEventListeners();
 
+const confirmPopup = new PopupWithConfirmation(
+  popupConfirm,
+  ({ card, cardId }) => {
+    api.deleteCard(cardId).then(card.removeCardElement());
+  }
+);
+confirmPopup.setEventListeners();
+
 const userInfo = new UserInfo({ nameSelector: nameElement, aboutSelector: aboutElement, avatarSelector: avatarElement });
+
 
 buttonOpenPopupEditElement.addEventListener("click", () => {
   inputNameElement.value = userInfo.getUserInfo().name;
@@ -71,23 +85,32 @@ buttonOpenPopupAddNewCard.addEventListener("click", () => {
   addCardFormValidator.disableButton();
 });
 
-function createCard(item) {
-  const card = new Card(item, elementTemplate, (name, link) => {
-    picturePopup.open(item)
-  });
-  return card.getCard();
-}
 
-function renderCard(item, cardList) {
-  const cardElement = createCard(item);
+function createCard(item, user) {
+  const card = new Card(
+    item,
+    elementTemplate,
+    () => { picturePopup.open(item) },
+    confirmPopup.open,
+    user
+  );
+  return card.getCard();
+};
+
+
+function renderCard(item, cardList, user) {
+  const cardElement = createCard(item, user);
   cardList.addItem(cardElement);
 }
 
 function handleFormAddCard(inputValues) {
-  api.addCard(inputValues.title, inputValues.link)
-    .then((res) => {
-      renderCard({ name: res.name, link: res.link, likes: res.likes }, cardList)
-    });
+  Promise.all([api.addCard(inputValues.title, inputValues.link), api.getUser()])
+    .then(([newCard, user]) => {
+      renderCard({
+        name: newCard.name, _id: newCard._id, link: newCard.link, likes: newCard.likes, owner: { _id: newCard.owner._id }
+      }, cardList, user._id)
+    })
+    .catch((error => console.error(`Ошибка при попытке создать новую карточку ${error}`)));
   popupAdd.close();
 }
 
@@ -95,6 +118,7 @@ function handleSubmitSetInfo(inputValues) {
   api.updateProfileInfo(inputValues.name, inputValues.about)
     .then(res => res.json())
     .then((res) => userInfo.setUserInfo({ name: res.name, about: res.about }))
+    .catch((error => console.error(`Ошибка при попытке редактировать профиль ${error}`)))
 
   popupEdit.close();
 };
@@ -106,4 +130,5 @@ api.getUser().then((res) => {
   userInfo.setUserInfo({ name, about, avatar })
 }
 );
+
 

@@ -10,6 +10,7 @@ export const settings = {
 export const popupProfileEdit = document.querySelector(".popup-edit");
 export const popupAddNewCard = document.querySelector(".popup-add");
 export const popupPicture = document.querySelector(".popup-picture");
+export const popupConfirm = document.querySelector(".popup-confirm");
 export const buttonOpenPopupEditElement = document.querySelector(".profile__edit-button");
 export const buttonOpenPopupAddNewCard = document.querySelector(".profile__add-button");
 export const formEditProfile = popupProfileEdit.querySelector(".popup__form-edit");

@@ -1,4 +1,4 @@
-.popup__form {
+.popup-confirm__container {
   min-width: 358px;
   background-color: #fff;
   border-radius: 10px;
@@ -6,7 +6,7 @@
 }
 
 @media screen and (max-width: 580px) {
-  .popup__form {
+  .popup-confirm__container {
     min-width: 238px;
     padding: 25px 22px 25px 22px;
   }

@@ -83,23 +83,33 @@
       <h2 class="popup__photo-title"> </h2>
     </div>
   </section>
-  <template class="template-element">
-    <li class="elements__element">
-      <button class="elements__basket-button" type="button">
-        <img src="<%=require('./images/basket.svg')%>" alt="удалить" class="elements__basket">
-      </button>
-      <img src="/" alt="фото" class="elements__image">
-      <div class="elements__text-container">
-        <h2 class="elements__title"></h2>
-        <div class="elements__like">
-          <button class="elements__like-button" type="button">
-            <img src="<%=require('./images/like.svg')%>" alt="нравится" class="elements__like-icon">
-          </button>
-          <p class="elements__like-counter"></p>
-        </div>
-      </div>
-    </li>
-  </template>
+  <section class="popup popup-confirm">
+    <div class="popup__container">
+      <div class="popup-confirm__container">
+        <button class="popup__close-button" type="button"><img class="popup__close-img"
+            src="<%=require('./images/CloseIcon.svg')%>" alt="Закрыть"></button>
+        <h2 class="popup__title">Вы уверены?</h2>
+        <button class="popup-confirm__button" type="button"">Да</button>
+    </div>
+    </div>
+  </section>
+  <template class=" template-element">
+          <li class="elements__element">
+            <button class="elements__basket-button" type="button">
+              <img src="<%=require('./images/basket.svg')%>" alt="удалить" class="elements__basket">
+            </button>
+            <img src="/" alt="фото" class="elements__image">
+            <div class="elements__text-container">
+              <h2 class="elements__title"></h2>
+              <div class="elements__like">
+                <button class="elements__like-button" type="button">
+                  <img src="<%=require('./images/like.svg')%>" alt="нравится" class="elements__like-icon">
+                </button>
+                <p class="elements__like-counter"></p>
+              </div>
+            </div>
+          </li>
+          </template>
 </body>
 
 </html>

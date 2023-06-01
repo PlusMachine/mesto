@@ -1,6 +1,6 @@
-.popup__button {
+.popup-confirm__button {
   display: block;
-  margin: 21px auto 0 auto;
+  margin: 38px auto 0 auto;
   width: 100%;
   background: #000000;
   color: #fff;
@@ -14,12 +14,12 @@
   cursor: pointer;
 }
 
-.popup__button:hover {
+.popup-confirm__button:hover {
   opacity: 80%;
 }
 
 @media screen and (max-width: 580px) {
-  .popup__button {
+  .popup-confirm__button {
     font-size: 14px;
     line-height: 17px;
     margin-top: 30px;
