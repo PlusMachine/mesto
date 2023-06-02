@@ -4,16 +4,20 @@ import {
   popupPicture,
   popupAddNewCard,
   popupConfirm,
+  popupEditAvatar,
   formAddNewCard,
   formEditProfile,
+  formEditAvatar,
   nameElement,
   aboutElement,
   avatarElement,
   elementTemplate,
   buttonOpenPopupAddNewCard,
   buttonOpenPopupEditElement,
+  buttonOpenPopupEditAvatar,
   inputNameElement,
   inputAboutElement,
+  inputAvatarElement,
 } from '../utils/constants.js';
 import Api from '../components/Api.js';
 import Card from '../components/Card.js';
@@ -26,6 +30,7 @@ import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
 import UserInfo from '../components/UserInfo.js';
 import '../pages/index.css';
 
+
 let cardList;
 
 const api = new Api({
@@ -37,7 +42,6 @@ const api = new Api({
 });
 
 
-
 const picturePopup = new PopupWithImage(popupPicture);
 picturePopup.setEventListeners();
 
@@ -47,18 +51,25 @@ addCardFormValidator.enableValidation();
 const editProfileFormValidator = new FormValidator(settings, formEditProfile);
 editProfileFormValidator.enableValidation();
 
+const editAvatarFormValidator = new FormValidator(settings, formEditAvatar);
+editAvatarFormValidator.enableValidation();
+
 Promise.all([api.getInitialCards(), api.getUser()])
   .then(([initialCards, user]) => {
     const items = initialCards.reverse();
     cardList = new Section({ items, renderer: renderCard }, ".elements__list", user._id);
     cardList.renderItems(cardList);
-  });
+  }).catch((error => console.error(`Ошибка при получении массива карточек или информации о пользователе ${error}`)))
+  ;
 
 const popupAdd = new PopupWithForm(popupAddNewCard, handleFormAddCard, settings);
 popupAdd.setEventListeners();
 
 const popupEdit = new PopupWithForm(popupProfileEdit, handleSubmitSetInfo, settings);
 popupEdit.setEventListeners();
+
+const popupUpdateAvatar = new PopupWithForm(popupEditAvatar, handleEditAvatar, settings);
+popupUpdateAvatar.setEventListeners();
 
 const confirmPopup = new PopupWithConfirmation(
   popupConfirm,
@@ -69,6 +80,11 @@ const confirmPopup = new PopupWithConfirmation(
 confirmPopup.setEventListeners();
 
 const userInfo = new UserInfo({ nameSelector: nameElement, aboutSelector: aboutElement, avatarSelector: avatarElement });
+
+api.getUser().then((res) => {
+  userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar })
+});
+
 
 
 buttonOpenPopupEditElement.addEventListener("click", () => {
@@ -85,6 +101,13 @@ buttonOpenPopupAddNewCard.addEventListener("click", () => {
   addCardFormValidator.disableButton();
 });
 
+buttonOpenPopupEditAvatar.addEventListener("click", () => {
+  inputAvatarElement.value = userInfo.getUserInfo().avatar;
+
+  editAvatarFormValidator.resetValidation();
+  popupUpdateAvatar.open();
+})
+
 
 function createCard(item, user) {
   const card = new Card(
@@ -92,6 +115,14 @@ function createCard(item, user) {
     elementTemplate,
     () => { picturePopup.open(item) },
     confirmPopup.open,
+    (cardId) => {
+      let itLiked = card.isLiked(cardId);
+      if (itLiked) {
+        api.deleteLike(cardId).then((res) => card.toggleButtonLike(res.likes))
+      } else {
+        api.addLike(cardId).then((res) => card.toggleButtonLike(res.likes));
+      }
+    },
     user
   );
   return card.getCard();
@@ -116,19 +147,18 @@ function handleFormAddCard(inputValues) {
 
 function handleSubmitSetInfo(inputValues) {
   api.updateProfileInfo(inputValues.name, inputValues.about)
-    .then(res => res.json())
-    .then((res) => userInfo.setUserInfo({ name: res.name, about: res.about }))
+    .then((res) => userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar }))
     .catch((error => console.error(`Ошибка при попытке редактировать профиль ${error}`)))
 
   popupEdit.close();
 };
 
-api.getUser().then((res) => {
-  const name = res.name;
-  const about = res.about;
-  const avatar = res.avatar;
-  userInfo.setUserInfo({ name, about, avatar })
+function handleEditAvatar(inputValues) {
+  api.updateAvatar(inputValues.avatar)
+    .then((res) => userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar }))
+    .catch((error => console.error(`Ошибка при попытке сменить аватар ${error}`)))
+
+  popupUpdateAvatar.close();
 }
-);
 
 

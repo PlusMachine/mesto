@@ -59,6 +59,34 @@ class Api {
     }).then(this._checkResponse)
 
   };
+
+  addLike(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+      method: 'PUT',
+      headers: {
+        authorization: this._authorization
+      }
+    }).then(this._checkResponse)
+  };
+
+  deleteLike(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+      method: 'DELETE',
+      headers: {
+        authorization: this._authorization
+      }
+    }).then(this._checkResponse)
+  };
+
+  updateAvatar(data) {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: data,
+      })
+    }).then(this._checkResponse)
+  }
 }
 
 export default Api;

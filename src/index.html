@@ -15,7 +15,8 @@
   <main>
     <section class="profile" aria-label="профиль">
       <div class="profile__user">
-        <img src="" alt="аватар" class="profile__avatar">
+        <img src="#" alt="аватар" class="profile__image">
+        <button class="profile__button" type="button"></button>
         <div class="profile__info">
           <div class="profile__personal-data">
             <h1 class="profile__name"></h1>
@@ -52,6 +53,21 @@
           <input type="text" id="about-input" class="popup__form-field popup__form-field_input_about" name="about"
             placeholder="Профессия" required minlength="2" maxlength="200">
           <span class="popup__form-input-error about-input-error"></span>
+        </fieldset>
+        <button class="popup__button popup__save-button" type="submit">Сохранить</button>
+      </form>
+    </div>
+  </section>
+  <section class="popup popup-edit-avatar">
+    <div class="popup__container">
+      <button class="popup__close-button" type="button"><img class="popup__close-img"
+          src="<%=require('./images/CloseIcon.svg')%>" alt="Закрыть"></button>
+      <form class="popup__form popup__form-edit-avatar" name="change-avatar" novalidate>
+        <h2 class="popup__title">Обновить аватар</h2>
+        <fieldset class="popup__input-container">
+          <input type="url" id="link-avatar-input" class="popup__form-field popup__form-field_input_avatar"
+            name="avatar" required placeholder="Ссылка на картинку">
+          <span class="popup__form-input-error link-avatar-input-error"></span>
         </fieldset>
         <button class="popup__button popup__save-button" type="submit">Сохранить</button>
       </form>

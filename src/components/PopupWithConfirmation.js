@@ -10,7 +10,6 @@ class PopupWithConfirmation extends Popup {
   setEventListeners() {
     super.setEventListeners();
     this._button.addEventListener('click', () => {
-      console.log(this._card, this._cardId);
       this._handleButtonConfirm({ card: this._card, cardId: this._cardId });
       this.close();
     })
