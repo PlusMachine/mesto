@@ -5,13 +5,14 @@ class PopupWithConfirmation extends Popup {
     super(popupSelector);
     this._button = document.querySelector('.popup-confirm__button');
     this._handleButtonConfirm = handleButtonConfirm;
+    this._buttonDefaultText = this._button.textContent;
   }
 
   setEventListeners() {
     super.setEventListeners();
     this._button.addEventListener('click', () => {
       this._handleButtonConfirm({ card: this._card, cardId: this._cardId });
-      this.close();
+      this._button.textContent = `${this._button.textContent}...`
     })
   };
 
@@ -19,6 +20,10 @@ class PopupWithConfirmation extends Popup {
     super.open();
     this._card = card;
     this._cardId = cardId
+  }
+
+  setDefaultButtonText() {
+    this._button.textContent = this._buttonDefaultText;
   }
 }
 

@@ -5,7 +5,7 @@ class Api {
     this._authorization = headers.authorization;
   }
 
-  _checkResponse(res) { return res.ok ? res.json() : Promise.reject };
+  _checkResponse(res) { return res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`) };
 
   getUser() {
     return fetch(`${this._baseUrl}/users/me`, {

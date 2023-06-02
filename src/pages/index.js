@@ -74,7 +74,11 @@ popupUpdateAvatar.setEventListeners();
 const confirmPopup = new PopupWithConfirmation(
   popupConfirm,
   ({ card, cardId }) => {
-    api.deleteCard(cardId).then(card.removeCardElement());
+    api.deleteCard(cardId).then(() => {
+      card.removeCardElement();
+      confirmPopup.close();
+      confirmPopup.setDefaultButtonText();
+    });
   }
 );
 confirmPopup.setEventListeners();
@@ -83,7 +87,7 @@ const userInfo = new UserInfo({ nameSelector: nameElement, aboutSelector: aboutE
 
 api.getUser().then((res) => {
   userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar })
-});
+}).catch((error) => console.error(`Ошибка при загрузке данных ${error}`));
 
 
 
@@ -119,8 +123,10 @@ function createCard(item, user) {
       let itLiked = card.isLiked(cardId);
       if (itLiked) {
         api.deleteLike(cardId).then((res) => card.toggleButtonLike(res.likes))
+          .catch((error) => console.error(`Ошибка при снятии лайка ${error}`))
       } else {
-        api.addLike(cardId).then((res) => card.toggleButtonLike(res.likes));
+        api.addLike(cardId).then((res) => card.toggleButtonLike(res.likes))
+          .catch((error) => console.error(`Ошибка при попытке поставить лайк ${error}`));
       }
     },
     user
@@ -139,26 +145,32 @@ function handleFormAddCard(inputValues) {
     .then(([newCard, user]) => {
       renderCard({
         name: newCard.name, _id: newCard._id, link: newCard.link, likes: newCard.likes, owner: { _id: newCard.owner._id }
-      }, cardList, user._id)
+      }, cardList, user._id);
+      popupAdd.setDefaultButtonText();
+      popupAdd.close();
     })
     .catch((error => console.error(`Ошибка при попытке создать новую карточку ${error}`)));
-  popupAdd.close();
 }
 
 function handleSubmitSetInfo(inputValues) {
   api.updateProfileInfo(inputValues.name, inputValues.about)
-    .then((res) => userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar }))
+    .then((res) => {
+      userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar });
+      popupEdit.setDefaultButtonText();
+      popupEdit.close();
+    })
     .catch((error => console.error(`Ошибка при попытке редактировать профиль ${error}`)))
 
-  popupEdit.close();
 };
 
 function handleEditAvatar(inputValues) {
   api.updateAvatar(inputValues.avatar)
-    .then((res) => userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar }))
+    .then((res) => {
+      userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar });
+      popupUpdateAvatar.setDefaultButtonText();
+      popupUpdateAvatar.close();
+    })
     .catch((error => console.error(`Ошибка при попытке сменить аватар ${error}`)))
-
-  popupUpdateAvatar.close();
 }
 
 
