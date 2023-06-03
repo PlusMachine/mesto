@@ -31,8 +31,6 @@ import UserInfo from '../components/UserInfo.js';
 import '../pages/index.css';
 
 
-let cardList;
-
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-66',
   headers: {
@@ -40,6 +38,8 @@ const api = new Api({
     'Content-Type': 'application/json'
   }
 });
+
+const cardList = new Section({ renderer: renderCard }, ".elements__list");
 
 
 const picturePopup = new PopupWithImage(popupPicture);
@@ -54,11 +54,11 @@ editProfileFormValidator.enableValidation();
 const editAvatarFormValidator = new FormValidator(settings, formEditAvatar);
 editAvatarFormValidator.enableValidation();
 
-Promise.all([api.getInitialCards(), api.getUser()])
-  .then(([initialCards, user]) => {
+api.getInitialCards().
+  then((initialCards) => {
+    const userId = userInfo.getUserInfo().userId;
     const items = initialCards.reverse();
-    cardList = new Section({ items, renderer: renderCard }, ".elements__list");
-    cardList.renderItems(cardList, user._id)
+    cardList.renderItems(items, userId)
   }).catch((error => console.error(`Ошибка при получении массива карточек или информации о пользователе ${error}`)))
   ;
 
@@ -78,7 +78,8 @@ const confirmPopup = new PopupWithConfirmation(
       card.removeCardElement();
       confirmPopup.close();
       confirmPopup.setDefaultButtonText();
-    });
+    })
+      .catch((error) => console.error(`Ошибка при удалении карточки ${error}`));
   }
 );
 confirmPopup.setEventListeners();
@@ -86,7 +87,7 @@ confirmPopup.setEventListeners();
 const userInfo = new UserInfo({ nameSelector: nameElement, aboutSelector: aboutElement, avatarSelector: avatarElement });
 
 api.getUser().then((res) => {
-  userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar })
+  userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar, userId: res._id })
 }).catch((error) => console.error(`Ошибка при загрузке данных ${error}`));
 
 
@@ -135,18 +136,18 @@ function createCard(item, user) {
 };
 
 
-function renderCard(item, cardList, user) {
-  console.log(item)
+function renderCard(item, user) {
   const cardElement = createCard(item, user);
   cardList.addItem(cardElement);
 }
 
 function handleFormAddCard(inputValues) {
-  Promise.all([api.addCard(inputValues.title, inputValues.link), api.getUser()])
-    .then(([newCard, user]) => {
+  api.addCard(inputValues.title, inputValues.link)
+    .then((newCard) => {
+      const userId = userInfo.getUserInfo().userId
       renderCard({
         name: newCard.name, _id: newCard._id, link: newCard.link, likes: newCard.likes, owner: { _id: newCard.owner._id }
-      }, cardList, user._id);
+      }, userId);
       popupAdd.setDefaultButtonText();
       popupAdd.close();
     })
