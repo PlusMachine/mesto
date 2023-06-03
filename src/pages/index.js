@@ -39,6 +39,14 @@ const api = new Api({
   }
 });
 
+
+const userInfo = new UserInfo({ nameSelector: nameElement, aboutSelector: aboutElement, avatarSelector: avatarElement });
+
+api.getUser().then((res) => {
+  userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar, userId: res._id })
+}).catch((error) => console.error(`Ошибка при загрузке данных ${error}`));
+
+
 const cardList = new Section({ renderer: renderCard }, ".elements__list");
 
 
@@ -77,24 +85,19 @@ const confirmPopup = new PopupWithConfirmation(
     api.deleteCard(cardId).then(() => {
       card.removeCardElement();
       confirmPopup.close();
-      confirmPopup.setDefaultButtonText();
     })
-      .catch((error) => console.error(`Ошибка при удалении карточки ${error}`));
+      .catch((error) => console.error(`Ошибка при удалении карточки ${error}`))
+      .finally(() => confirmPopup.setDefaultButtonText());
   }
 );
 confirmPopup.setEventListeners();
 
-const userInfo = new UserInfo({ nameSelector: nameElement, aboutSelector: aboutElement, avatarSelector: avatarElement });
-
-api.getUser().then((res) => {
-  userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar, userId: res._id })
-}).catch((error) => console.error(`Ошибка при загрузке данных ${error}`));
-
-
 
 buttonOpenPopupEditElement.addEventListener("click", () => {
-  inputNameElement.value = userInfo.getUserInfo().name;
-  inputAboutElement.value = userInfo.getUserInfo().about;
+  const ownerInfo = userInfo.getUserInfo();
+
+  inputNameElement.value = ownerInfo.name;
+  inputAboutElement.value = ownerInfo.about;
 
   editProfileFormValidator.resetValidation();
   popupEdit.open();
@@ -144,24 +147,23 @@ function renderCard(item, user) {
 function handleFormAddCard(inputValues) {
   api.addCard(inputValues.title, inputValues.link)
     .then((newCard) => {
-      const userId = userInfo.getUserInfo().userId
       renderCard({
         name: newCard.name, _id: newCard._id, link: newCard.link, likes: newCard.likes, owner: { _id: newCard.owner._id }
-      }, userId);
-      popupAdd.setDefaultButtonText();
+      }, newCard.owner._id);
       popupAdd.close();
     })
-    .catch((error => console.error(`Ошибка при попытке создать новую карточку ${error}`)));
+    .catch((error => console.error(`Ошибка при попытке создать новую карточку ${error}`)))
+    .finally(() => popupAdd.setDefaultButtonText());
 }
 
 function handleSubmitSetInfo(inputValues) {
   api.updateProfileInfo(inputValues.name, inputValues.about)
     .then((res) => {
       userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar });
-      popupEdit.setDefaultButtonText();
       popupEdit.close();
     })
     .catch((error => console.error(`Ошибка при попытке редактировать профиль ${error}`)))
+    .finally(() => popupEdit.setDefaultButtonText());
 
 };
 
@@ -169,10 +171,10 @@ function handleEditAvatar(inputValues) {
   api.updateAvatar(inputValues.avatar)
     .then((res) => {
       userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar });
-      popupUpdateAvatar.setDefaultButtonText();
       popupUpdateAvatar.close();
     })
     .catch((error => console.error(`Ошибка при попытке сменить аватар ${error}`)))
+    .finally(() => popupUpdateAvatar.setDefaultButtonText());
 }
 
 
