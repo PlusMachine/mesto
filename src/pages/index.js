@@ -57,8 +57,8 @@ editAvatarFormValidator.enableValidation();
 Promise.all([api.getInitialCards(), api.getUser()])
   .then(([initialCards, user]) => {
     const items = initialCards.reverse();
-    cardList = new Section({ items, renderer: renderCard }, ".elements__list", user._id);
-    cardList.renderItems(cardList);
+    cardList = new Section({ items, renderer: renderCard }, ".elements__list");
+    cardList.renderItems(cardList, user._id)
   }).catch((error => console.error(`Ошибка при получении массива карточек или информации о пользователе ${error}`)))
   ;
 
@@ -120,7 +120,7 @@ function createCard(item, user) {
     () => { picturePopup.open(item) },
     confirmPopup.open,
     (cardId) => {
-      let itLiked = card.isLiked(cardId);
+      let itLiked = card.isLiked();
       if (itLiked) {
         api.deleteLike(cardId).then((res) => card.toggleButtonLike(res.likes))
           .catch((error) => console.error(`Ошибка при снятии лайка ${error}`))
@@ -136,6 +136,7 @@ function createCard(item, user) {
 
 
 function renderCard(item, cardList, user) {
+  console.log(item)
   const cardElement = createCard(item, user);
   cardList.addItem(cardElement);
 }

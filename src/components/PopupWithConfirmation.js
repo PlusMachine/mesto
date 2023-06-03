@@ -12,7 +12,7 @@ class PopupWithConfirmation extends Popup {
     super.setEventListeners();
     this._button.addEventListener('click', () => {
       this._handleButtonConfirm({ card: this._card, cardId: this._cardId });
-      this._button.textContent = `${this._button.textContent}...`
+      this._button.textContent = `Удаление...`
     })
   };
 
