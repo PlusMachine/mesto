@@ -42,10 +42,14 @@ const api = new Api({
 
 const userInfo = new UserInfo({ nameSelector: nameElement, aboutSelector: aboutElement, avatarSelector: avatarElement });
 
-api.getUser().then((res) => {
-  userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar, userId: res._id })
-}).catch((error) => console.error(`Ошибка при загрузке данных ${error}`));
-
+Promise.all([api.getInitialCards(), api.getUser()])
+  .then(([initialCards, user]) => {
+    userInfo.setUserInfo({ name: user.name, about: user.about, avatar: user.avatar, userId: user._id });
+    const userId = userInfo.getUserInfo().userId;
+    const items = initialCards.reverse();
+    cardList.renderItems(items, userId)
+  }).catch((error => console.error(`Ошибка при получении массива карточек или информации о пользователе ${error}`)))
+  ;
 
 const cardList = new Section({ renderer: renderCard }, ".elements__list");
 
@@ -61,14 +65,6 @@ editProfileFormValidator.enableValidation();
 
 const editAvatarFormValidator = new FormValidator(settings, formEditAvatar);
 editAvatarFormValidator.enableValidation();
-
-api.getInitialCards().
-  then((initialCards) => {
-    const userId = userInfo.getUserInfo().userId;
-    const items = initialCards.reverse();
-    cardList.renderItems(items, userId)
-  }).catch((error => console.error(`Ошибка при получении массива карточек или информации о пользователе ${error}`)))
-  ;
 
 const popupAdd = new PopupWithForm(popupAddNewCard, handleFormAddCard, settings);
 popupAdd.setEventListeners();
